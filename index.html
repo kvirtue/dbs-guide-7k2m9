@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adaptive DBS — A Family Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#fbfaf8;
+    --paper-2:#f1efea;
+    --ink:#1f2421;
+    --ink-soft:#4f574f;
+    --rule:#dcd9d2;
+    --divider:#b9b3a6;
+    --accent:#b04a2a;        /* terracotta accent */
+    --accent-soft:#c9714f;
+    --teal:#1f5a52;          /* deep readable teal */
+    --gold:#9a7a22;
+    --card:#ffffff;
+    --shadow:rgba(30,40,33,.12);
+    --max:760px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:'Newsreader',Georgia,serif;font-size:19px;line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 26px;}
+
+  /* ---------- header ---------- */
+  header.hero{
+    padding:84px 26px 54px;max-width:var(--max);margin:0 auto;
+    border-bottom:1px solid var(--divider);
+  }
+  .kicker{
+    font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);margin:0 0 22px;
+  }
+  h1{
+    font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:clamp(38px,7vw,58px);
+    line-height:1.06;letter-spacing:-.02em;margin:0 0 24px;color:var(--ink);
+  }
+  h1 em{font-style:italic;color:var(--teal);}
+  .lede{font-size:21px;color:var(--ink-soft);max-width:60ch;margin:0;}
+  .lede strong{color:var(--ink);font-weight:500;}
+
+  /* ---------- the one action callout ---------- */
+  .action{
+    margin:40px auto 0;max-width:var(--max);
+    background:var(--teal);color:#f4efe6;border-radius:14px;
+    padding:26px 30px;box-shadow:0 14px 30px -16px var(--shadow);
+  }
+  .action .tag{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.2em;
+    text-transform:uppercase;color:#bcd4cf;margin:0 0 8px;}
+  .action p{margin:0;font-size:18.5px;line-height:1.55;}
+  .action a{color:#f0d9a0;text-decoration:underline;text-underline-offset:3px;font-weight:500;}
+
+  /* ---------- sections ---------- */
+  section{padding:54px 0;border-bottom:1px solid var(--divider);}
+  .num{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;letter-spacing:.18em;
+    color:var(--accent);text-transform:uppercase;margin:0 0 12px;}
+  h2{font-family:'Libre Franklin',sans-serif;font-weight:600;font-size:clamp(27px,4.5vw,36px);
+    line-height:1.15;margin:0 0 20px;letter-spacing:-.015em;}
+  h2 em{font-style:italic;color:var(--teal);}
+  p{margin:0 0 18px;}
+  .soft{color:var(--ink-soft);}
+
+  /* ---------- stat strip ---------- */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:30px 0 10px;}
+  .stat{background:var(--card);border:1px solid var(--rule);border-radius:12px;
+    padding:22px 18px;text-align:center;box-shadow:0 8px 22px -18px var(--shadow);}
+  .stat .big{font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:40px;
+    line-height:1;color:var(--accent);display:block;letter-spacing:-.02em;}
+  .stat .lab{font-size:14.5px;color:var(--ink-soft);line-height:1.35;margin-top:10px;display:block;}
+  @media(max-width:560px){.stats{grid-template-columns:1fr;}.stat{display:flex;align-items:center;gap:16px;text-align:left;}.stat .big{font-size:34px;}.stat .lab{margin-top:0;}}
+
+  /* ---------- before/after ---------- */
+  .ba{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:26px 0;}
+  .ba .col{border-radius:12px;padding:22px;border:1px solid var(--rule);}
+  .ba .old{background:#efe6d6;}
+  .ba .new{background:#e7efe9;}
+  .ba h4{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.16em;
+    text-transform:uppercase;margin:0 0 14px;}
+  .ba .old h4{color:#8a6d3b;}
+  .ba .new h4{color:var(--teal);}
+  .ba ul{margin:0;padding-left:18px;font-size:16.5px;line-height:1.5;color:var(--ink-soft);}
+  .ba li{margin-bottom:10px;}
+  @media(max-width:560px){.ba{grid-template-columns:1fr;}}
+
+  /* ---------- drilldown ---------- */
+  details.dd{border:1px solid var(--rule);border-radius:12px;background:var(--card);
+    margin:14px 0;overflow:hidden;box-shadow:0 8px 22px -20px var(--shadow);
+    transition:border-color .2s;}
+  details.dd[open]{border-color:var(--accent-soft);}
+  details.dd summary{
+    cursor:pointer;list-style:none;padding:20px 24px;
+    font-family:'Libre Franklin',sans-serif;font-size:20px;font-weight:600;color:var(--ink);
+    display:flex;align-items:center;gap:14px;}
+  details.dd summary::-webkit-details-marker{display:none;}
+  .chev{margin-left:auto;width:22px;height:22px;flex:none;color:var(--accent);
+    transition:transform .25s;}
+  details.dd[open] .chev{transform:rotate(90deg);}
+  .dd .body{padding:0 24px 24px;font-size:17px;line-height:1.62;color:var(--ink-soft);}
+  .dd .body p{margin:0 0 14px;}
+  .dd .body strong{color:var(--ink);font-weight:500;}
+  .dd .body ul{padding-left:20px;margin:0 0 14px;}
+  .dd .body li{margin-bottom:9px;}
+  .pill{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;
+    letter-spacing:.1em;background:var(--paper-2);border:1px solid var(--rule);
+    color:var(--accent);padding:3px 9px;border-radius:20px;text-transform:uppercase;}
+
+  /* ---------- centers ---------- */
+  .center{background:var(--card);border:1px solid var(--rule);border-radius:14px;
+    padding:26px 28px;margin:16px 0;box-shadow:0 10px 26px -20px var(--shadow);}
+  .center.feat{border-color:var(--teal);}
+  .center .cname{font-family:'Libre Franklin',sans-serif;font-size:22px;font-weight:600;margin:0 0 4px;letter-spacing:-.01em;}
+  .center .loc{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink-soft);
+    letter-spacing:.05em;margin:0 0 4px;}
+  .center .phone{font-family:'IBM Plex Mono',monospace;font-size:13px;margin:0 0 14px;}
+  .center .phone a{color:var(--accent);text-decoration:none;font-weight:500;}
+  .center .phone a:hover{text-decoration:underline;}
+  .center .why{font-size:16.5px;color:var(--ink-soft);margin:0 0 16px;}
+  .center .why strong{color:var(--ink);}
+  .badge{display:inline-block;background:var(--teal);color:#eef5f2;font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;border-radius:6px;margin-bottom:12px;}
+  .docs{border-top:1px dashed var(--rule);padding-top:14px;margin-top:4px;}
+  .docs .d{font-size:15.5px;margin-bottom:9px;color:var(--ink-soft);}
+  .docs .d b{color:var(--ink);font-weight:500;}
+  /* in-card drilldown */
+  details.cd{margin-top:16px;border-top:1px solid var(--divider);}
+  details.cd summary{cursor:pointer;list-style:none;padding:14px 0 2px;
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:8px;}
+  details.cd summary::-webkit-details-marker{display:none;}
+  details.cd .cchev{width:16px;height:16px;transition:transform .22s;}
+  details.cd[open] .cchev{transform:rotate(90deg);}
+  .cd .cbody{padding-top:12px;}
+  .cd h5{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-soft);margin:16px 0 8px;}
+  .cd h5:first-child{margin-top:0;}
+  .cd .row{font-size:15px;color:var(--ink-soft);margin-bottom:6px;line-height:1.5;}
+  .cd .row b{color:var(--ink);font-weight:500;}
+  .cd .row a{color:var(--accent);text-decoration:none;}
+  .cd .row a:hover{text-decoration:underline;}
+  .cd .doc{font-size:15px;color:var(--ink-soft);margin-bottom:12px;line-height:1.5;}
+  .cd .doc b{color:var(--ink);font-weight:600;display:block;}
+  .cd .confirm{font-size:13.5px;font-style:italic;color:var(--ink-soft);
+    background:var(--paper-2);border-radius:8px;padding:10px 14px;margin-top:14px;}
+
+  /* ---------- questions ---------- */
+  .qbox{background:var(--paper-2);border:1px solid var(--rule);border-radius:14px;padding:28px 30px;margin-top:24px;}
+  .qbox ol{margin:0;padding-left:22px;}
+  .qbox li{margin-bottom:14px;font-size:17px;color:var(--ink);}
+  .qbox li span{color:var(--ink-soft);}
+
+  /* ---------- library ---------- */
+  .lib h3{font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--accent);margin:26px 0 12px;border-bottom:1px solid var(--divider);padding-bottom:8px;}
+  .lib a{display:block;color:var(--ink);text-decoration:none;font-size:16px;
+    padding:9px 0;border-bottom:1px solid rgba(216,205,185,.5);line-height:1.4;
+    transition:color .15s,padding-left .15s;}
+  .lib a:hover{color:var(--accent);padding-left:8px;}
+  .lib a .src{display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);letter-spacing:.04em;margin-top:2px;}
+
+  footer{padding:56px 26px 80px;max-width:var(--max);margin:0 auto;text-align:center;color:var(--ink-soft);font-size:15px;}
+  footer .fam{font-family:'Libre Franklin',sans-serif;font-weight:600;font-size:20px;color:var(--teal);margin-bottom:14px;}
+
+  /* nav dots */
+  nav.toc{position:fixed;top:50%;right:18px;transform:translateY(-50%);display:flex;
+    flex-direction:column;gap:14px;z-index:50;}
+  nav.toc a{width:10px;height:10px;border-radius:50%;background:var(--rule);transition:all .2s;position:relative;}
+  nav.toc a:hover,nav.toc a.on{background:var(--accent);transform:scale(1.3);}
+  nav.toc a span{position:absolute;right:20px;top:50%;transform:translateY(-50%);
+    white-space:nowrap;background:var(--ink);color:var(--paper);font-size:12px;
+    font-family:'IBM Plex Mono',monospace;padding:4px 9px;border-radius:5px;
+    opacity:0;pointer-events:none;transition:opacity .2s;letter-spacing:.04em;}
+  nav.toc a:hover span{opacity:1;}
+  @media(max-width:900px){nav.toc{display:none;}}
+
+  .note{font-size:15px;color:var(--ink-soft);font-style:italic;background:var(--paper-2);
+    border:1px solid var(--rule);border-radius:10px;padding:16px 20px;margin:24px 0;}
+</style>
+</head>
+<body>
+
+<nav class="toc" aria-label="Section navigation">
+  <a href="#start" data-s="start"><span>The situation</span></a>
+  <a href="#what" data-s="what"><span>What aDBS is</span></a>
+  <a href="#works" data-s="works"><span>Does it work</span></a>
+  <a href="#deeper" data-s="deeper"><span>The science</span></a>
+  <a href="#centers" data-s="centers"><span>The centers</span></a>
+  <a href="#ask" data-s="ask"><span>What to ask</span></a>
+  <a href="#library" data-s="library"><span>The library</span></a>
+</nav>
+
+<header class="hero" id="start">
+  <p class="kicker">June 2026</p>
+  <h1>The next step for Dad's brain stimulation.</h1>
+  <p class="lede">His DBS device helped for years. Lately the progress has stalled — symptoms creeping back, settings that don't hold the way they used to. That's a known pattern, and there's now a <strong>newer way of running the same implanted hardware</strong> that's worth looking into. This page lays out the research in plain terms, with the details a step away whenever you want them.</p>
+</header>
+
+<div class="wrap">
+
+<!-- ============ WHERE WE ARE ============ -->
+<section id="situation">
+  <p class="num">01 — The situation</p>
+  <h2>Good devices can stop keeping up.</h2>
+  <p>Traditional DBS sends a <strong>constant, unchanging pulse</strong> into the brain, day and night. It doesn't know whether the medication is working, whether it's the middle of the night, or whether symptoms are flaring. It just runs at one setting.</p>
+  <p>Over several years, two things happen. The brain tissue can grow <strong>tolerant</strong> to a constant signal (called habituation), so the same setting does less — pushing doctors to keep turning it up, which can bring on side effects like slurred speech or balance trouble. And because the pulse never adjusts, it's often <strong>too strong when medicated and too weak when it wears off</strong>.</p>
+  <p class="note">This is exactly the picture of "it used to work better." It doesn't necessarily mean the disease has jumped ahead — it can mean the <em>delivery method</em> has reached its limits.</p>
+</section>
+
+<!-- ============ WHAT IT IS ============ -->
+<section id="what">
+  <p class="num">02 — The idea</p>
+  <h2>Adaptive DBS listens, then adjusts.</h2>
+  <p>Adaptive DBS (aDBS) uses the <strong>same implanted leads</strong>, but turns the device into a two-way system: it reads the brain's own electrical signals and <strong>raises or lowers stimulation in real time</strong> — more when symptoms emerge, less when they ease. Just the right amount, moment to moment.</p>
+  <p>For anyone whose implant is in Medtronic's recent "Percept" family, this can often be switched on <strong>without new surgery</strong> — it's a software activation plus a careful tuning process.</p>
+
+  <div class="ba">
+    <div class="col old">
+      <h4>Traditional (constant)</h4>
+      <ul>
+        <li>One fixed setting, 24 hours a day</li>
+        <li>Can't follow medication ups and downs</li>
+        <li>Brain may grow tolerant over years</li>
+        <li>Settings climb; side effects creep in</li>
+      </ul>
+    </div>
+    <div class="col new">
+      <h4>Adaptive (responsive)</h4>
+      <ul>
+        <li>Adjusts second-by-second to brain signals</li>
+        <li>Eases off when medicated, ramps up when needed</li>
+        <li>Built-in "rest" periods that fight tolerance</li>
+        <li>More steady relief, often longer battery life</li>
+      </ul>
+    </div>
+  </div>
+  <p class="soft">The "how it actually knows" — the brain signals, the control logic — is in <a href="#deeper" style="color:var(--accent)">the science section</a> if you want it. You don't need it to understand the decision.</p>
+</section>
+
+<!-- ============ DOES IT WORK ============ -->
+<section id="works">
+  <p class="num">03 — The evidence</p>
+  <h2>It's FDA-approved, and patients chose to keep it.</h2>
+  <p>This isn't experimental anymore. The FDA approved the adaptive system in 2025, based on a major trial called <strong>ADAPT-PD</strong> that studied 68 people much like Dad — already implanted for a few years, doing okay but not great on the old mode.</p>
+
+  <div class="stats">
+    <div class="stat"><span class="big">98%</span><span class="lab">chose to stay on adaptive DBS rather than switch back</span></div>
+    <div class="stat"><span class="big">+1.3<small style="font-size:18px"> hrs</small></span><span class="lab">more good "on" time per day, with less dyskinesia</span></div>
+    <div class="stat"><span class="big">−1.6<small style="font-size:18px"> hrs</small></span><span class="lab">less "off" time — the stiff, frozen, immobile stretches</span></div>
+  </div>
+  <p style="margin-top:24px">A real-world follow-up study (ADAPT-START) saw patients walking notably better, with a roughly <strong>40% drop in freezing-of-gait</strong> — one of the hardest symptoms to treat. The full numbers, including the honest caveats, are in the drilldown below.</p>
+
+  <details class="dd">
+    <summary>The trial results in full <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></summary>
+    <div class="body">
+      <p><span class="pill">ADAPT-PD</span> The pivotal trial — multicenter, single-blind crossover, comparing adaptive vs. the patient's own optimized continuous DBS.</p>
+      <ul>
+        <li><strong>95%</strong> of patients on the preferred "dual-threshold" mode met the success bar; <strong>87%</strong> on the simpler single-threshold mode.</li>
+        <li>The dual-threshold mode added <strong>1.3 hours/day of good "on" time</strong> and cut <strong>1.6 hours of "off" time</strong> — both clinically meaningful.</li>
+        <li>After 30 days, <strong>98% preferred adaptive</strong>, citing fewer symptom swings (66%), better movement (63%), and fewer side effects (45%).</li>
+        <li>About <strong>30% of adverse events</strong> were tied to the adaptive setup itself — almost all minor, temporary, and fixed with small reprogramming during the tuning phase.</li>
+      </ul>
+      <p><span class="pill">ADAPT-START</span> A real-world study of switching stable patients over during ordinary clinic visits.</p>
+      <ul>
+        <li>Roughly <strong>35% greater motor improvement</strong> over already-optimized old settings at one month.</li>
+        <li><strong>~40% reduction</strong> in freezing-of-gait scores.</li>
+        <li><strong>The honest caveat:</strong> overall quality-of-life scores actually dipped ~28% on average. Researchers think that as people moved more and re-engaged with life, they became more aware of remaining non-movement issues (fatigue, speech). Worth discussing with a doctor, not hiding.</li>
+        <li><strong>Not everyone qualifies:</strong> a clear brain signal is needed. In one real-world group, only 9 of 20 patients offered the switch were eligible — usually due to signal quality. This is a key question for any consult.</li>
+      </ul>
+    </div>
+  </details>
+</section>
+
+<!-- ============ GO DEEPER ============ -->
+<section id="deeper">
+  <p class="num">04 — Go deeper</p>
+  <h2>The science, a tap away.</h2>
+
+  <details class="dd">
+    <summary>How the device "reads" the brain <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></summary>
+    <div class="body">
+      <p>The implant senses <strong>local field potentials</strong> — tiny voltage rhythms from groups of brain cells near the electrodes. In Parkinson's, a particular rhythm called the <strong>beta band (13–35 Hz)</strong> rises when symptoms like stiffness and slowness take over, and falls when medication or stimulation is working.</p>
+      <p>By watching that beta signal, the device gets a live readout of how Dad is doing and adjusts accordingly. Other rhythms map to other things — gamma to dyskinesia and movement, theta/alpha to tremor — and future versions will likely track several at once.</p>
+    </div>
+  </details>
+
+  <details class="dd">
+    <summary>The two adjustment modes (single vs. dual threshold) <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></summary>
+    <div class="body">
+      <p><strong>Single-threshold:</strong> one line in the sand. Cross it and stimulation jumps within milliseconds. Very fast, but jumpier — and in the trial only modestly helpful, with slightly <em>worse</em> battery life.</p>
+      <p><strong>Dual-threshold (the preferred mode):</strong> an upper and lower line with a calm "leave it alone" zone in between. It eases up and down gradually over minutes, matching the slow rhythm of medication wearing in and off. This is the mode that delivered the strong results above, plus about <strong>5% better battery life per year</strong>.</p>
+      <p>For most long-term patients, dual-threshold is becoming the gold standard.</p>
+    </div>
+  </details>
+
+  <details class="dd">
+    <summary>Why this fights "tolerance" (habituation) <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></summary>
+    <div class="body">
+      <p>A constant pulse gives the brain nothing to adapt around, so over time it pushes back and the therapy fades — the reason settings keep climbing on old DBS.</p>
+      <p>Adaptive DBS lowers stimulation whenever symptoms are quiet, giving the tissue <strong>regular periods of rest</strong>. Early long-term data suggests the underlying brain signals stay stable this way, and patients hold their gains without the constant upward dose-chasing. In effect, it can act as a <strong>non-surgical "reset."</strong></p>
+    </div>
+  </details>
+
+  <details class="dd">
+    <summary>What the switch-over actually involves <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></summary>
+    <div class="body">
+      <p>It's more involved than a normal tune-up — worth knowing so it's not a surprise:</p>
+      <ul>
+        <li><strong>~4 visits on average</strong> to dial in the settings.</li>
+        <li>One step requires being seen <strong>off medication</strong> (uncomfortable but brief) to find the lower limit safely.</li>
+        <li><strong>3–5 days of at-home recording</strong> so the team can match the device's readings to Dad's real daily life, then fine-tune.</li>
+      </ul>
+      <p>This is exactly why a center's experience — and remote-programming options — matter so much.</p>
+    </div>
+  </details>
+</section>
+
+<!-- ============ CENTERS ============ -->
+<section id="centers">
+  <p class="num">05 — Where to go</p>
+  <h2>Five strong centers.</h2>
+  <p>These are nationally recognized specialists, all within reach in the DC–Maryland–Virginia area. It's reasonable to consult at more than one before deciding. Each card opens to full contact details, the complete care team, and logistics.</p>
+  <p class="note">All five are major academic or health-system hospitals that accept Medicare and most major commercial plans. Confirm coverage directly before scheduling — and ask whether both the surgeon and the hospital facility are in-network, since they're sometimes billed separately.</p>
+
+  <div class="center feat">
+    <span class="badge">Remote programming from home</span>
+    <p class="cname">Inova Parkinson's &amp; Movement Disorders Center</p>
+    <p class="loc">Fairfax · Loudoun · Gainesville · Alexandria · Dumfries, VA</p>
+    <p class="phone"><a href="tel:7038451500">703-845-1500</a></p>
+    <p class="why">Among the <strong>first centers in the country to offer remote DBS programming</strong> — adjustments over secure video from home (Abbott's NeuroSphere Virtual Clinic). Since the switch-over needs several intensive visits, that's a real reduction in travel and fatigue for patient and caregiver alike.</p>
+    <div class="docs">
+      <div class="d"><b>Dr. Ramsey "Drew" Falconer</b> &amp; <b>Dr. Sean Rogers</b> — movement specialists, co-lead the adaptive programming</div>
+      <div class="d"><b>Sonia Gow</b> — care manager, a real lifeline for visit logistics</div>
+    </div>
+    <details class="cd">
+      <summary><svg class="cchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>Full details</summary>
+      <div class="cbody">
+        <h5>Contact &amp; logistics</h5>
+        <div class="row"><b>Appointments:</b> <a href="tel:7038451500">703-845-1500</a> · scheduling <a href="tel:5714724200">571-472-4200</a></div>
+        <div class="row"><b>Portal:</b> MyChart — mychart.inova.org</div>
+        <div class="row"><b>More info:</b> ipmdc.org · inova.org/move</div>
+        <div class="row"><b>Locations:</b> Alexandria (1500 N Beauregard St, Ste 300) · Dumfries (3800 Fettler Park Dr, Ste 312) · Fairfax (3620 Joseph Siewick Dr, Ste 400; and 8081 Innovation Park Dr, Ste 900) · Gainesville (7051 Heathcote Village Way, Ste 230)</div>
+        <h5>The care team</h5>
+        <div class="doc"><b>Dr. Ramsey "Drew" Falconer — Medical Director</b>Board-certified neurologist, fellowship-trained in movement disorders. Oversees several clinical trials and is a national educator in Parkinson's and DBS.</div>
+        <div class="doc"><b>Dr. Sean Rogers — Movement Disorders</b>Specialty-trained in device screening and programming; works in close partnership with Dr. Falconer.</div>
+        <div class="doc"><b>Dr. Mahesh Shenai — Functional Neurosurgeon</b>Specialty-trained in the surgical management of DBS; works seamlessly with the neurology team.</div>
+        <div class="doc"><b>Sonia Gow — Program &amp; Community Care Manager</b>703-375-9987 · sonia.gow@inova.org. Guides patients through the entire DBS journey and the logistics of intensive programming visits.</div>
+        <div class="confirm">A Dr. Whitney also appears on Inova's DBS team listings — worth asking about when you call.</div>
+      </div>
+    </details>
+  </div>
+
+  <div class="center feat">
+    <span class="badge">Parkinson's Foundation Center of Excellence</span>
+    <p class="cname">MedStar Georgetown University Hospital</p>
+    <p class="loc">Washington, D.C.</p>
+    <p class="phone"><a href="tel:2024448525">202-444-8525</a></p>
+    <p class="why">The <strong>first Center of Excellence in the DC metro area</strong>. Programming decisions are made by a full team — neurology, neurosurgery, neuropsychology, rehab — which matters a lot for a complex switch like this. Intraoperative-MRI-guided surgical precision; faculty help teach this nationally.</p>
+    <div class="docs">
+      <div class="d"><b>Dr. Fernando Pagan</b> — Movement Disorders Program director; <b>Dr. Yasar Torres-Yaghi</b> — advanced therapeutics</div>
+      <div class="d"><b>Dr. Christopher Kalhorn</b> — functional neurosurgery</div>
+    </div>
+    <details class="cd">
+      <summary><svg class="cchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>Full details</summary>
+      <div class="cbody">
+        <h5>Contact &amp; logistics</h5>
+        <div class="row"><b>Movement Disorders Program:</b> <a href="tel:2024448525">202-444-8525</a> (Pasquerilla Healthcare Center, 7th Floor) · or <a href="tel:2023422400">202-342-2400</a></div>
+        <div class="row"><b>Address:</b> 3800 Reservoir Rd NW, Washington, DC 20007</div>
+        <div class="row"><b>Portal:</b> MyChart (MedStar)</div>
+        <div class="row"><b>Insurance:</b> Accepts most major plans; MedStar advises calling your insurer directly if unsure.</div>
+        <h5>The care team</h5>
+        <div class="doc"><b>Dr. Fernando Pagan — Movement Disorders</b>Professor and Vice Chairman of Neurology; Director of the Movement Disorders Program and Medical Director of the PF Center of Excellence; Co-Program Director of DBS. Deep experience with complex, medication-resistant cases.</div>
+        <div class="doc"><b>Dr. Yasar Torres-Yaghi — Movement Disorders</b>Advanced therapeutics, botulinum toxin, complex motor management; frequent research collaborator with Dr. Pagan.</div>
+        <div class="doc"><b>Dr. Christopher Kalhorn — Functional Neurosurgeon</b>Co-Program Director; a leading authority in functional neurosurgery, guided by intraoperative MRI for precise electrode placement.</div>
+        <div class="confirm">Dr. Steven Lo appeared in earlier materials but wasn't in current listings — worth confirming when you call.</div>
+      </div>
+    </details>
+  </div>
+
+  <div class="center">
+    <span class="badge">PF Center of Excellence since 2006</span>
+    <p class="cname">Johns Hopkins Movement Disorders Center</p>
+    <p class="loc">Baltimore · Lutherville, MD</p>
+    <p class="phone"><a href="tel:4109559441">410-955-9441</a></p>
+    <p class="why">A global leader in brain electrophysiology, with a rare focus on <strong>how stimulation affects thinking and memory</strong>, not just movement. Best suited for the most complex cases — especially if there are any cognitive concerns alongside the motor symptoms.</p>
+    <div class="docs">
+      <div class="d"><b>Dr. Kelly Mills</b> — DBS and cognitive function</div>
+      <div class="d"><b>Dr. William S. Anderson</b> — neurosurgery, network-level neuromodulation</div>
+    </div>
+    <details class="cd">
+      <summary><svg class="cchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>Full details</summary>
+      <div class="cbody">
+        <h5>Contact &amp; logistics</h5>
+        <div class="row"><b>Adult Neurology:</b> <a href="tel:4109559441">410-955-9441</a></div>
+        <div class="row"><b>Adult Neurosurgery (DBS surgical side):</b> <a href="tel:4109556406">410-955-6406</a></div>
+        <div class="row"><b>International patients:</b> +1-410-502-7683</div>
+        <div class="row"><b>Primary clinic:</b> Johns Hopkins Health Care &amp; Surgery Center, Green Spring Station, Lutherville, MD</div>
+        <div class="row"><b>Portal:</b> MyChart (Johns Hopkins)</div>
+        <h5>The care team</h5>
+        <div class="doc"><b>Dr. Kelly Mills — Movement Disorders Neurologist</b>Researches the relationship between DBS for movement symptoms and its effects on cognition — memory, impulsivity, executive attention. Critical for safely setting adaptive stimulation boundaries.</div>
+        <div class="doc"><b>Dr. William S. Anderson — Neurosurgeon &amp; Neuromodulation Researcher</b>Handles complex DBS implantations; involved in broader neuromodulation research (pain, spasticity, epilepsy via cortical stimulation). Network-level expertise suits nuanced reprogramming.</div>
+      </div>
+    </details>
+  </div>
+
+  <div class="center">
+    <span class="badge">Diagnosis &amp; long-term care</span>
+    <p class="cname">University of Maryland Medical Center</p>
+    <p class="loc">Baltimore, MD</p>
+    <p class="phone"><a href="tel:4103284323">410-328-4323</a></p>
+    <p class="why">Exceptional at <strong>diagnosis and long-term care</strong> — making sure a declining response really is the DBS reaching its limit, and not a different condition that needs addressing first. A wise first stop or second opinion if anything about the picture seems unusual. Also offers MRI-guided focused ultrasound.</p>
+    <div class="docs">
+      <div class="d"><b>Dr. Paul Fishman</b>, <b>Dr. Lisa Shulman</b>, <b>Dr. Joseph Savitt</b>, <b>Dr. F. Rainer von Coelln</b> — movement disorders</div>
+      <div class="d"><b>Dr. Howard Eisenberg</b> — neurosurgery</div>
+    </div>
+    <details class="cd">
+      <summary><svg class="cchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>Full details</summary>
+      <div class="cbody">
+        <h5>Contact &amp; logistics</h5>
+        <div class="row"><b>Appointments:</b> <a href="tel:4103284323">410-328-4323</a> (neurology and movement disorders)</div>
+        <div class="row"><b>Address:</b> James T. Frenkil Building, 16 S. Eutaw St, Suite 300, Baltimore, MD 21201</div>
+        <div class="row"><b>Hours:</b> 8:00 am – 4:30 pm</div>
+        <div class="row"><b>Portal:</b> MyPortfolioChart / MyChart (UMMC)</div>
+        <h5>The care team</h5>
+        <div class="doc"><b>Dr. Paul Fishman — Movement Disorders</b>Highly experienced and deeply respected in the Parkinson's care community.</div>
+        <div class="doc"><b>Dr. Lisa Shulman · Dr. Joseph Savitt · Dr. F. Rainer von Coelln — Movement Disorders</b></div>
+        <div class="doc"><b>Dr. Howard Eisenberg — Neurosurgery</b></div>
+        <div class="confirm">Dr. Stephen Reich — noted earlier for atypical Parkinsonism expertise — wasn't in the current published list; worth confirming whether he's still seeing patients here.</div>
+      </div>
+    </details>
+  </div>
+
+  <div class="center">
+    <span class="badge">Focused ultrasound in-house</span>
+    <p class="cname">George Washington University Hospital</p>
+    <p class="loc">Washington, D.C.</p>
+    <p class="phone"><a href="tel:2027412700">202-741-2700</a></p>
+    <p class="why">A modern, precision-focused program with <strong>focused-ultrasound technology in-house</strong> — an alternative therapy for certain tremor cases that keeps the whole team working at the edge of neuroanatomical exactness. Accepting new patients, including telehealth.</p>
+    <div class="docs">
+      <div class="d"><b>Dr. Pritha Ghosh</b> &amp; <b>Dr. Panagiotis Kassavetis</b> — DBS programming</div>
+    </div>
+    <details class="cd">
+      <summary><svg class="cchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>Full details</summary>
+      <div class="cbody">
+        <h5>Contact &amp; logistics</h5>
+        <div class="row"><b>Movement Disorders Program (GW Medical Faculty Associates):</b> <a href="tel:2027412700">202-741-2700</a></div>
+        <div class="row"><b>Address:</b> GW Neurology, Foggy Bottom — 2150 Pennsylvania Ave NW, 7th Floor, Washington, DC 20037</div>
+        <div class="row"><b>Insurance:</b> Dr. Ghosh accepts Medicare, Cigna, Blue Cross, and UnitedHealthcare, among others.</div>
+        <div class="row"><b>New patients:</b> Accepting, including telehealth appointments.</div>
+        <h5>The care team</h5>
+        <div class="doc"><b>Dr. Pritha Ghosh — Movement Disorders</b>Board-certified neurologist, fellowship-trained at the NIH (under Dr. Mark Hallett), focused on Parkinson's and DBS. Associate Professor of Neurology.</div>
+        <div class="doc"><b>Dr. Panagiotis Kassavetis — Movement Disorders</b>Board-certified, fellowship-trained; co-manages complex DBS programming alongside Dr. Ghosh.</div>
+        <div class="confirm">The movement disorders team collaborates closely with the Department of Neurosurgery for the surgical component.</div>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ============ QUESTIONS ============ -->
+<section id="ask">
+  <p class="num">06 — At the appointment</p>
+  <h2>What to ask them.</h2>
+  <p>A short list to bring to any consult.</p>
+  <div class="qbox">
+    <ol>
+      <li>Have you switched patients from traditional to adaptive DBS before? <span>How many, and how did they do?</span></li>
+      <li>Is Dad's implant compatible, and does he have a clear enough brain signal to qualify? <span>(Not everyone does.)</span></li>
+      <li>Is the stalled progress likely device tolerance, or disease progression? <span>How do you tell them apart?</span></li>
+      <li>What does the programming process look like — how many visits, over what timeline?</li>
+      <li>Do you offer any remote programming from home?</li>
+      <li>Who makes the programming decisions — one neurologist, or a full team?</li>
+      <li>How do you watch for cognitive or mood side effects as settings change?</li>
+      <li>What does follow-up look like once the switch is done?</li>
+      <li>Is my insurance plan in-network — and are both the surgeon and the hospital facility covered?</li>
+      <li>Will I need a physician referral before being seen? <span>(Some programs require one.)</span></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ LIBRARY ============ -->
+<section id="library">
+  <p class="num">07 — The full record</p>
+  <h2>The full record.</h2>
+  <p class="soft">The complete research behind this page — keep it for the doctors, or for anyone who wants to read the primary sources.</p>
+
+  <div class="lib">
+    <h3>The big picture & approval</h3>
+    <a href="https://news.medtronic.com/2025-02-24-Medtronic-earns-U-S-FDA-approval-for-the-worlds-first-Adaptive-deep-brain-stimulation-system-for-people-with-Parkinsons" target="_blank" rel="noopener">FDA approval of the world's first adaptive DBS system (Medtronic)<span class="src">news.medtronic.com</span></a>
+    <a href="https://www.accessdata.fda.gov/cdrh_docs/pdf/P960009S478B.pdf" target="_blank" rel="noopener">FDA Summary of Safety and Effectiveness (the official approval document)<span class="src">accessdata.fda.gov · PDF</span></a>
+    <a href="https://www.apdaparkinson.org/article/adaptive-deep-brain-stimulation-dbs/" target="_blank" rel="noopener">Adaptive DBS: A New Era in Parkinson's Treatment (patient-friendly overview)<span class="src">apdaparkinson.org</span></a>
+
+    <h3>The trials (ADAPT-PD & ADAPT-START)</h3>
+    <a href="https://clinicaltrials.gov/study/NCT04547712" target="_blank" rel="noopener">ADAPT-PD trial registry — official study details<span class="src">clinicaltrials.gov · NCT04547712</span></a>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/40982287/" target="_blank" rel="noopener">Long-Term Personalized Adaptive DBS in Parkinson Disease (clinical trial)<span class="src">pubmed.ncbi.nlm.nih.gov</span></a>
+    <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11408616/" target="_blank" rel="noopener">Sensing data & methodology from the ADAPT-PD trial<span class="src">pmc.ncbi.nlm.nih.gov</span></a>
+    <a href="https://www.medrxiv.org/content/10.1101/2025.09.25.25336275v1.full-text" target="_blank" rel="noopener">ADAPT-START findings & programming principles (real-world)<span class="src">medRxiv · preprint</span></a>
+    <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12397205/" target="_blank" rel="noopener">Chronic adaptive DBS for Parkinson's disease<span class="src">pmc.ncbi.nlm.nih.gov</span></a>
+
+    <h3>Tolerance, habituation & long-term outcomes</h3>
+    <a href="https://www.frontiersin.org/journals/neurology/articles/10.3389/fneur.2021.696950/full" target="_blank" rel="noopener">Habituation after DBS in tremor syndromes — prevalence & risk factors<span class="src">Frontiers in Neurology</span></a>
+    <a href="https://www.medrxiv.org/content/10.64898/2025.12.17.25342504v1.full-text" target="_blank" rel="noopener">Disease progression vs. DBS-related worsening in essential tremor<span class="src">medRxiv · preprint</span></a>
+    <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8397098/" target="_blank" rel="noopener">DBS for tremor: long-term outcomes & future directions<span class="src">pmc.ncbi.nlm.nih.gov</span></a>
+    <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11835528/" target="_blank" rel="noopener">Sustained benefit of adaptive DBS using gamma oscillations (case report)<span class="src">pmc.ncbi.nlm.nih.gov</span></a>
+
+    <h3>Programming workflow & technology</h3>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/41577516/" target="_blank" rel="noopener">A workflow algorithm for adaptive DBS programming<span class="src">pubmed.ncbi.nlm.nih.gov</span></a>
+    <a href="https://www.researchgate.net/publication/386537311_Closed-loop_systems_for_deep_brain_stimulation_to_treat_neuropsychiatric_disorders" target="_blank" rel="noopener">Closed-loop DBS systems for neuropsychiatric disorders<span class="src">ResearchGate</span></a>
+
+    <h3>The DMV centers</h3>
+    <a href="https://www.inova.org/our-services/inova-parkinsons-and-movement-disorders-center" target="_blank" rel="noopener">Inova Parkinson's & Movement Disorders Center<span class="src">inova.org</span></a>
+    <a href="https://www.medstarhealth.org/blog/deep-brain-stimulation-movement-disorders" target="_blank" rel="noopener">MedStar Georgetown — DBS for movement disorders<span class="src">medstarhealth.org</span></a>
+    <a href="https://www.hopkinsmedicine.org/neurology-neurosurgery/specialty-areas/movement-disorders" target="_blank" rel="noopener">Johns Hopkins Movement Disorders Center<span class="src">hopkinsmedicine.org</span></a>
+    <a href="https://www.researchgate.net/profile/Stephen-Reich" target="_blank" rel="noopener">Dr. Stephen Reich — University of Maryland<span class="src">ResearchGate</span></a>
+    <a href="https://neurology.smhs.gwu.edu/clinical-research-unit/current-research/movement-disorders" target="_blank" rel="noopener">GW Movement Disorders<span class="src">gwu.edu</span></a>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  <p class="fam">Strong options, all within reach.</p>
+  <p>A plain-language summary of the research, meant as a starting point for understanding the decision. It isn't medical advice. The next step is a consultation with one of these specialists.</p>
+  <p style="margin-top:18px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;">Family research summary · June 2026</p>
+</footer>
+
+<script>
+  // active nav dot on scroll
+  const dots=[...document.querySelectorAll('nav.toc a')];
+  const map={start:'start',situation:'start',what:'what',works:'works',deeper:'deeper',centers:'centers',ask:'ask',library:'library'};
+  const secs=[...document.querySelectorAll('section, header')];
+  const io=new IntersectionObserver((es)=>{
+    es.forEach(e=>{
+      if(e.isIntersecting){
+        const id=e.target.id; const key=map[id];
+        dots.forEach(d=>d.classList.toggle('on', d.dataset.s===key));
+      }
+    });
+  },{rootMargin:'-45% 0px -45% 0px'});
+  secs.forEach(s=>io.observe(s));
+</script>
+</body>
+</html>
